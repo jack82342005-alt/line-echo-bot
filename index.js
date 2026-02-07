@@ -85,15 +85,10 @@ app.get("/cron/daily", async (req, res) => {
 
     return res.send("ok");
   } catch (err) {
-    console.error("CRON ERROR:", err);
-    return res.status(500).send(
-      "error\n" + (err && err.message ? err.message : String(err))
-    );
-  }
-});
+  console.error("CRON ERROR:", err?.response?.data || err);
 
-// Render 必須用 PORT
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log("Server running on port", port);
-});
+  return res.status(500).send(
+    "error " +
+    JSON.stringify(err?.response?.data || err?.message || err)
+  );
+}
