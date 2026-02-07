@@ -103,9 +103,13 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
 
     res.status(200).end();
   } catch (err) {
-    console.error(err);
-    res.status(500).end();
-  }
+  console.error("OPENAI ERROR:", err.message);
+
+  await client.replyMessage(event.replyToken, {
+    type: "text",
+    text: `我剛剛回答失敗了 😢\n原因：${err.message}`,
+  });
+}
 });
 
 // Render 指定 PORT
