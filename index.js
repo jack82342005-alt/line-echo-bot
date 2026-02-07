@@ -94,9 +94,12 @@ app.get("/cron/daily", async (req, res) => {
     });
 
     res.send("ok");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("error");
-  }
-});
+} catch (err) {
+  console.error("CRON ERROR:", err);
 
+  // 把錯誤直接回傳到瀏覽器，方便你看
+  return res.status(500).send(
+    "error\n" +
+    (err && err.message ? err.message : String(err))
+  );
+}
