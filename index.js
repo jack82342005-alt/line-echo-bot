@@ -73,16 +73,28 @@ app.listen(port, () => {
   console.log("Server running on port", port);
 });
 // 定時推播用 API（給日曆/排程呼叫）
+const axios = require("axios");
+
 app.get("/cron/daily", async (req, res) => {
   if (req.query.key !== process.env.CRON_SECRET) {
     return res.status(403).send("forbidden");
   }
 
   try {
-    // TODO：改成你要推播的 userId / 群組 ID
-    await client.pushMessage("U16718d2eefc3779247e529881d6e0ba0", {
+    // 🔗 你的 GAS（今天＋明天）
+    const GAS_URL =
+      "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLiisEP_mpQhmt99vA08s1lCiuqEQpO7_zfddchQfRMH3Oq5NDGksgAvP4zKJZG-E68me-k2RqNZEI2_QXljP50xF9ofJDsuUFtieTn67rRedySgWXh1epHhlgpwxLS48SLWD8cLirD0VqRLjd1wYyi2IqN1mRshjgPS3WaZ1bNN0YUnO4_uEqf8PTmDruSUmAvD0FXHzjfy6sE4qgys9wlvQKSd0EgkK8KFJ6Tu1GJvpg-9dDCc_ZBxV_VORTCUky_l0u8HpnD0_kaEaPdTQQ0NAX88-warUXmDs0o5&lib=Mt5DjXQx-1gxYNn5QBg1h_qbv70iApjm-";
+
+    // 從 GAS 取得「今天＋明天」文字
+    const gasRes = await axios.get(GAS_URL);
+    const message = gasRes.data;
+
+    // ⚠️ 改成你的群組 ID 或 userId
+    const TARGET_ID = "Cxxxxxxxxxxxxxxxx"; // 或 Uxxxxxxxxxxxxxxx
+
+    await client.pushMessage(TARGET_ID, {
       type: "text",
-      text: "⏰ 每日定時推播測試成功",
+      text: message,
     });
 
     res.send("ok");
@@ -91,3 +103,4 @@ app.get("/cron/daily", async (req, res) => {
     res.status(500).send("error");
   }
 });
+
