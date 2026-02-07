@@ -25,7 +25,7 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
       if (event.type !== "message" || event.message.type !== "text") continue;
 
       const text = event.message.text;
-
+console.log("USER_ID:", event.source.userId);
       if (text.toLowerCase() === "hi") {
         await client.replyMessage(event.replyToken, {
           type: "text",
