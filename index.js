@@ -53,3 +53,22 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("Server running on port", port);
 });
+// 定時推播用 API（給日曆/排程呼叫）
+app.get("/cron/daily", async (req, res) => {
+  if (req.query.key !== process.env.CRON_SECRET) {
+    return res.status(403).send("forbidden");
+  }
+
+  try {
+    // TODO：改成你要推播的 userId / 群組 ID
+    await client.pushMessage("USER_ID_OR_GROUP_ID", {
+      type: "text",
+      text: "⏰ 每日定時推播測試成功",
+    });
+
+    res.send("ok");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("error");
+  }
+});
