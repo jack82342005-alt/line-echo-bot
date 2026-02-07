@@ -26,7 +26,7 @@ app.post(
         }
 
         // 只在「群組」回應
-        if (event.source.type === "group") {
+        if (event.source.type === "group" || event.source.type === "room") {
           const text = event.message.text.toLowerCase();
 
           if (text === "hi") {
