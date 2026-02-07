@@ -24,7 +24,7 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
       // 只處理文字訊息
       if (event.type !== "message" || event.message.type !== "text") continue;
 
-      const const text = event.message.text || "";
+      const text = event.message.text || "";
 const isGroup = event.source.type === "group";
 
 // 你的機器人顯示名稱（跟群組裡看到的一樣）
