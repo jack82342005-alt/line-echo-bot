@@ -103,11 +103,16 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
 
     res.status(200).end();
   } catch (err) {
-  console.error("OPENAI ERROR:", err.message);
+  const detail =
+    err?.response?.data
+      ? JSON.stringify(err.response.data)
+      : (err?.message || String(err));
+
+  console.error("OPENAI ERROR DETAIL:", detail);
 
   await client.replyMessage(event.replyToken, {
     type: "text",
-    text: `我剛剛回答失敗了 😢\n原因：${err.message}`,
+    text: `我剛剛回答失敗了 🥲\n原因：${detail}`,
   });
 }
 });
