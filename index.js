@@ -25,7 +25,7 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
       if (event.type !== "message" || event.message.type !== "text") continue;
 
       const text = event.message.text;
-console.log("USER_ID:", event.source.userId);
+console.log("U16718d2eefc3779247e529881d6e0ba0:", event.source.userId);
       if (text.toLowerCase() === "hi") {
         await client.replyMessage(event.replyToken, {
           type: "text",
@@ -61,7 +61,7 @@ app.get("/cron/daily", async (req, res) => {
 
   try {
     // TODO：改成你要推播的 userId / 群組 ID
-    await client.pushMessage("USER_ID_OR_GROUP_ID", {
+    await client.pushMessage("U16718d2eefc3779247e529881d6e0ba0", {
       type: "text",
       text: "⏰ 每日定時推播測試成功",
     });
