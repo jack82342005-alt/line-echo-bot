@@ -24,8 +24,27 @@ app.post("/webhook", line.middleware(config), async (req, res) => {
       // 只處理文字訊息
       if (event.type !== "message" || event.message.type !== "text") continue;
 
-      const text = event.message.text;
+      const const text = event.message.text || "";
+const isGroup = event.source.type === "group";
+
+// 你的機器人顯示名稱（跟群組裡看到的一樣）
+const BOT_NAME = "錦鯉優勢對話有限公司";
+
+// 是否在叫我
+const isCallingBot = text.includes(BOT_NAME);
+
 console.log("U16718d2eefc3779247e529881d6e0ba0:", event.source.userId);
+      // 群組 @ 小助手 → 今天行程
+if (isGroup && isCallingBot && text.includes("今天")) {
+  await client.replyMessage(event.replyToken, {
+    type: "text",
+    text: "我幫你查今天的行程中 ⏳",
+  });
+
+  // 👉 這裡之後會改成「真的查 Google Calendar」
+  return;
+}
+
       if (text.toLowerCase() === "hi") {
         await client.replyMessage(event.replyToken, {
           type: "text",
